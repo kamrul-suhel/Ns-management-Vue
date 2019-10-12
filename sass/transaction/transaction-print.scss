@@ -1,0 +1,115 @@
+@media print {
+  html, body {
+
+    width: 5.4in;
+    height: 8.10in;
+    background:#fff;
+    color:#000 !important;
+    margin:5px !important;
+
+    .container{
+      padding:0;
+      margin:0;
+    }
+  }
+
+  .transaction-print{
+    color:#000;
+
+    .print-btn{
+      display:none;
+    }
+
+    .logo{
+      font-size:24px !important;
+      font-weight:bold;
+    }
+
+    .logo-description{
+      color:#000;
+      font-weight: bold;
+      text-align: center;
+      margin-top: -5px;
+      font-size: 10px;
+    }
+
+    .subtitle{
+      font-size: 12px;
+      margin-top: -8px;
+      color:#000;
+    }
+
+    .address{
+      font-size:10px;
+      color:#000;
+    }
+
+    .logo-img{
+      img{
+        width:30px !important;
+        height:auto;
+        margin:15px auto;
+        display:block;
+      }
+    }
+
+    table.ns-table-print{
+      color:#000;
+      td{
+        padding:5px;
+        border-color: #000;
+      }
+    }
+
+    h2,h3{
+      color:#000;
+    }
+
+    p{
+      color:#000;
+    }
+  }
+
+  .transaction-print-table{
+    table {
+      width:100% !important;
+      border-collapse: collapse;
+    }
+  }
+
+  .application .theme--dark.card, .theme--dark .card{
+    background:#fff;
+    color:#000;
+  }
+  @page
+  {
+    size: portrait;
+    margin:0 !important;
+  }
+
+  //@page
+  //{
+  //  size: 2in 4.5in;
+  //  size: landscape;
+  //  margin:0;
+  //}
+
+  .v-navigation-drawer{
+    display:none;
+  }
+
+  .v-content{
+    padding:0 !important;
+    width:100% !important;
+    background:#fff !important;
+  }
+
+  .application .theme--dark.divider, .theme--dark .divider{
+    background-color:#777;
+  }
+
+  .v-toolbar{
+    display:none;
+  }
+
+}
