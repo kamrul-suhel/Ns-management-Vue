@@ -27,6 +27,7 @@ import AccountTransactionComponent from '../components/pages/bank/AccountTransac
 import CompanyComponent from '../components/pages/company/CompanyComponent'
 import CompanyTransaction from '../components/pages/company/CompanyTransitionsComponent'
 import AddCompanyTransaction from '../components/pages/company/transition/Add'
+import CreateSaleAssistanceComponent from '../components/pages/sale-assistance/CreateSaleAssistanceComponent'
 
 Vue.use(Router)
 
@@ -101,6 +102,12 @@ const routes = [
         path: '/transaction/:id/print',
         name: 'print_transaction',
         component: TransactionPrint
+    },
+
+    {
+        path: '/sale-assistance/create',
+        name: 'sale_assistance_create',
+        component: CreateSaleAssistanceComponent
     },
 
     {

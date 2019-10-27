@@ -169,7 +169,7 @@
 </template>
 
 <script>
-    import  LoginEventBus  from '../../../event_bus/login-event-bus';
+    import {mapGetters} from 'vuex'
     export default {
         data: () => ({
 
@@ -182,7 +182,8 @@
 
             roles: [
                 {text: 'admin'},
-                {text: 'staff'}
+                {text: 'staff'},
+                {text: 'sale-assistant'}
             ],
 
             showpassword: true,
@@ -269,6 +270,12 @@
         }),
 
         computed: {
+            ...mapGetters({
+                selectedShop: 'getSelectedShop',
+                role: 'getUserRole',
+                userId: 'getUserId',
+                selectedShopId: 'getSelectedShopId'
+            }),
             theme(){
                 this.$store.getters.getTheme;
             },
@@ -333,6 +340,8 @@
                     form.append('name', this.editedItem.name);
                     form.append('email', this.editedItem.email);
                     form.append('role', this.editedItem.role);
+                    form.append('role', this.editedItem.role);
+                    form.append('storeId', this.selectedShopId);
 
                     if(this.password !== '' && this.confirm_password !== ''){
                         form.append('_method', "POST");
@@ -347,7 +356,7 @@
                     }
 
 
-                    // create product
+                    // Create User
                     axios.post(url, form)
                         .then((response) => {
 

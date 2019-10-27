@@ -5,6 +5,7 @@ import settings from './modules/settings';
 import productTransaction from './modules/accounting/product_transaction'
 import customers from './modules/customer'
 import user from './modules/user'
+import saleAssistance from './modules/saleAssistance'
 import shop from './modules/shop'
 
 Vue.use(Vuex);
@@ -63,7 +64,8 @@ const store = new Vuex.Store({
         productTransaction,
         customers,
         user,
-        shop
+        shop,
+        saleAssistance
     }
 });
 

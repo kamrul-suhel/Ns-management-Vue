@@ -124,6 +124,35 @@
                             }
                         ]
                     },
+
+                    {
+                        icon: 'compare_arrows',
+                        text: 'Sale Assistance',
+                        access: 'staff',
+                        navs: [
+                            {
+                                icon: 'compare_arrows',
+                                text: 'Sale Assistance',
+                                link: 'sale_assistance_create',
+                                access: 'staff'
+                            },
+
+                            {
+                                icon: 'compare_arrows',
+                                text: 'Sale product',
+                                link: 'create_transaction',
+                                access: 'staff'
+                            },
+
+                            {
+                                icon: 'compare_arrows',
+                                text: 'Sale Return',
+                                link: 'saleReturn',
+                                access: 'staff'
+                            }
+                        ]
+                    },
+
                     {
                         icon: 'people',
                         text: 'Customers',
