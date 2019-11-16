@@ -265,6 +265,10 @@
             onReset(){
                 this.editedIndex = -1
                 this.editedItem = this.defaultItem
+            },
+
+            openDeleteDialog(store){
+
             }
         }
     }

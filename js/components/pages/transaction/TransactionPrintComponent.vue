@@ -8,9 +8,9 @@
                         width="100%">
                     <v-card-text>
                         <h2 class="text-xs-center logo">{{ data.setting.name ? data.setting.name : ''}}</h2>
-                        <h3 class="logo-description"><span class="description-style">mi</span> store in sylhet</h3>
+                        <h3 class="logo-description"><span class="description-style">Authorized</span> distributor of</h3>
                         <div class="logo-img">
-                            <img src="/images/xmlogo.png"/>
+                            <img src="/images/sh-tel.gif"/>
                         </div>
                         <h3 class="text-xs-center subtitle">Address: {{ data.setting.address }}</h3>
                         <v-layout row wrap class="address">

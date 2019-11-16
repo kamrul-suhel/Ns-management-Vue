@@ -27,6 +27,9 @@
                                 <v-flex xs12 v-if="previousDue > 0">
                                     <p class="red--text">This customer has TK.{{ previousDue }} due.</p>
                                 </v-flex>
+                                <v-flex xs12 v-else-if="previousDue < 0">
+                                    <p class="light-green--text" v-if="iniState">This customer do own money from you TK. {{ previousDue}}.</p>
+                                </v-flex>
                                 <v-flex xs12 v-else>
                                     <p class="light-green--text" v-if="iniState">This customer do not have any previous due.</p>
                                 </v-flex>
@@ -46,23 +49,28 @@
                                     Invoice number<br/>
                                     {{ transaction.invoice_number}}
                                 </v-flex>
+
                                 <v-flex xs3>
                                     Total<br/>
                                     TK.{{ transaction.total }}
                                 </v-flex>
+
                                 <v-flex xs3>
                                     Due<br/>
                                     TK.{{ transaction.payment_due }}
                                 </v-flex>
+
                                 <v-flex xs3>
                                     <v-text-field
                                             dark
                                             color="dark"
+                                            disabled
                                             label="How much he paying from this?"
                                             v-model="transaction.newamount"
                                             @input="calculateNewAmount()"
                                         ></v-text-field>
                                 </v-flex>
+
                                 <v-flex xs12>
                                     <v-divider></v-divider>
                                 </v-flex>
@@ -88,14 +96,69 @@
                                 </v-flex>
                             </v-layout>
 
+                            <v-layout row
+                                      wrap>
+                                <v-flex xs6>
+                                    <v-text-field dark
+                                                  color="dark"
+                                                  v-model="particular"
+                                                  label="Particular">
+                                    </v-text-field>
+                                </v-flex>
+
+                                <v-flex xs6>
+                                    <v-text-field dark
+                                                  v-model="remark"
+                                                  color="dark"
+                                                  label="Reference">
+                                    </v-text-field>
+                                </v-flex>
+
+                                <v-flex xs6>
+                                    <v-text-field dark
+                                                  v-model="reference"
+                                                  color="dark"
+                                                  label="Remark">
+                                    </v-text-field>
+                                </v-flex>
+
+                                <v-flex xs6>
+                                    <v-text-field
+                                            dark
+                                            color="dark"
+                                            label="Amount of pay"
+                                            type="number"
+                                            v-model="paid">
+                                    </v-text-field>
+                                </v-flex>
+
+                                <v-flex xs6>
+                                    <v-text-field
+                                            dark
+                                            color="dark"
+                                            label="Amount of given"
+                                            type="number"
+                                            v-model="given">
+                                    </v-text-field>
+                                </v-flex>
+
+
+                            </v-layout>
+
                             <v-layout
                                     row
                                     wrap
-                                    v-if="previousDue > 0">
+                                    v-if="selectedCustomer.value">
                                 <v-flex xs12 class="text-xs-right">
-                                    <v-btn dark color="dark" raised @click.native="onCancelTransaction()">Cancel</v-btn>
+                                    <v-btn dark
+                                           color="dark"
+                                           raised
+                                           @click.native="onCancelTransaction()">Cancel
+                                    </v-btn>
 
-                                    <v-btn dark raised @click="onCreateTransaction()">
+                                    <v-btn dark
+                                           raised
+                                           @click="onCreateTransaction()">
                                         Create transaction
                                     </v-btn>
                                 </v-flex>
@@ -118,10 +181,15 @@
             selectedCustomer:{},
             payment_due:'',
             paid: 0,
+            given:0,
             previousDue: 0,
             newAmountDue:0,
 
             transactions: [],
+
+            particular:'',
+            reference:'',
+            remark:'',
 
             iniState: false,
         }),
@@ -136,9 +204,8 @@
                 let url = '/transaction/due/create?customer_id='+val.value;
                 axios.get(url).then((response)=>{
                     this.previousDue = 0;
-                    if(response.data.previous_record.previousDue){
-                        this.previousDue = response.data.previous_record.previousDue;
-                    }
+
+                    this.previousDue = response.data.balance;
 
                     this.transactions = [];
                     if(response.data.transactions && response.data.transactions.length > 0){
@@ -194,7 +261,11 @@
                 form.append('transactions', JSON.stringify(this.transactions));
 
                 form.append('paid', this.paid);
+                form.append('given', this.given);
                 form.append('due', this.newAmountDue);
+                form.append('particular', this.particular);
+                form.append('remark', this.remark);
+                form.append('reference', this.reference);
 
                 axios.post(url, form)
                     .then((response)=>{

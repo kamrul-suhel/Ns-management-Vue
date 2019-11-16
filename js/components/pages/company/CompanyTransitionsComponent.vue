@@ -12,9 +12,9 @@
             <v-layout row wrap>
                 <v-flex xs3>
                     <v-card flat class="cyan lighten-1 white--text">
-                        <v-card-title>Total Transaction</v-card-title>
+                        <v-card-title>Total Company</v-card-title>
                         <v-card-text class="pt-0">
-                            <h2 class="display-2 white--text text-xs-center"><strong>350</strong></h2>
+                            <h2 class="display-2 white--text text-xs-center"><strong>{{ totalCompany }}</strong></h2>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -70,7 +70,6 @@
                                         item-value="id"
                                         label="Select A Company"
                                         required
-                                        @input="onCompanyChange()"
                                         v-model="selectedCompany"></v-select>
                             </v-flex>
 
@@ -192,6 +191,16 @@
                         </v-btn>
 
                         <v-spacer></v-spacer>
+                        <v-select
+                                dark
+                                color="dark"
+                                :items="companies"
+                                item-text="name"
+                                item-value="id"
+                                label="Select A Company"
+                                required
+                                v-model="selectedCompany"></v-select>
+
                         <v-text-field
                                 prepend-icon="search"
                                 label="Search"
@@ -201,7 +210,7 @@
                     <v-card-text>
                         <v-data-table
                                 :headers="headers"
-                                :items="items"
+                                :items="transitions"
                                 :search="search"
                                 :pagination.sync="pagination"
                                 :rows-per-page-items="row_per_page"
@@ -272,6 +281,7 @@
     /* eslint-disable no-unreachable */
 
     import axios from 'axios'
+    import {mapGetters} from 'vuex'
 
     export default {
         data: () => ({
@@ -335,7 +345,6 @@
             ],
             total_customer: '',
             items: [],
-            companies: [],
 
             editedIndex: -1,
                 editedItem: {
@@ -370,6 +379,12 @@
         }),
 
         computed: {
+            ...mapGetters({
+                companies : 'getCompanies',
+                totalCompany: 'getTotalCompany',
+                transitions: 'getCompanyTransitions'
+            }),
+
             formTitle() {
                 return this.editedIndex === -1 ? 'New Transaction' : 'Update Transaction'
             }
@@ -380,6 +395,9 @@
                 val || this.close()
             },
 
+            selectedCompany(value){
+                this.$store.dispatch('loadCompanyTransitions',{companyId: value})
+            }
         },
 
         created() {
@@ -389,15 +407,7 @@
         methods: {
             initialize() {
                 // get all product
-                axios.get('/api/ctransaction')
-                    .then((response) => {
-                        this.items = response.data.transactions;
-                        this.companies = response.data.companies;
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-
+                this.$store.dispatch('loadCompanies')
             },
 
             getNestedItem(item, name){
@@ -422,13 +432,8 @@
             },
 
             onCompanyChange(value){
-                let url =  'api/selectedcompany/' + this.selectedCompany;
-                axios.get(url).then((response) => {
-                    if(response.data) {
-                        this.balance = response.data.balance;
-                        this.editedItem.balance = response.data.balance;
-                    }
-                });
+
+                console.log(value);
             },
 
             convertNumber(value){

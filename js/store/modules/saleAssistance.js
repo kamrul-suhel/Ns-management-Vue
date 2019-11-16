@@ -1,47 +1,80 @@
 const state = {
-    products:[]
+    products: [],
+    saleAssistants: [],
+    selectedSaleAssistant : {}
 }
 
 
 const getters = {
+    getSaleAssistants(state) {
+        return state.saleAssistants;
+    },
+
+    getSaleAssistantProducts(state){
+        return state.products;
+    },
+
+    getSelectedSaleAssistant(state){
+        return state.selectedSaleAssistant;
+    },
+
+    getSelectedSaleAssistantId(state){
+        return state.selectedSaleAssistant.id;
+    }
 
 }
 
 const mutations = {
-    resetProductTransition(state){
+    setSaleAssistants(state, saleAssistants) {
+        state.saleAssistants = [...saleAssistants];
+    },
+
+    setProduct(state, product){
+        state.products.push(product);
+    },
+
+    setProducts(state, products){
+        console.log('products is: ', products);
+
+        state.products = [...products];
+    },
+
+    removeSaleAssistantProduct(state, product){
+
+        const products = state.products.filter((curProduct)=> {
+            return curProduct.barcode != product.barcode
+        });
+
+        state.products = [...products]
+    },
+
+    setSaleAssistant(state, saleAssistant){
+        state.selectedSaleAssistant = {...saleAssistant}
+    },
+
+    resetSaleAssistant(state){
         state.products = [];
+        state.saleAssistants = [];
+        state.selectedSaleAssistant = {};
     }
 }
 
 const actions = {
-    setTransaction({state}, product){
-
-        return new Promise((resolve, reject) => {
-            if(state.products.length === 0){
-                state.products.push(product);
-                resolve();
-            }else{
-                if(state.products[product.index] === 'undefined'){
-                    state.products.push(product);
-                    console.log(state.products);
-                    resolve();
-                }else{
-                    state.products[product.index] = product;
-                    resolve();
-                }
-            }
-        });
+    async getSaleAssistant({commit}, payload) {
+        // Get sale assistant
+        axios.get('/api/users?type=sale-assistant')
+            .then((response) => {
+                commit('setSaleAssistants', response.data)
+            });
     },
 
-    removeProduct({state}, removeProduct){
-        return new Promise((resolve, reject) => {
-            const totalProduct = state.products.filter((product, index) => {
-                return product.id !== removeProduct.id;
+    async getSaleAssistantProducts({commit}, payload){
+        const url = '/api/sale-assistant/products?date='+payload.date+'&userId='+payload.selectedUser.id
+        axios.get(url)
+            .then((response) => {
+                commit('setSaleAssistant', payload.selectedUser)
+                commit('setProducts', response.data)
             });
-
-            state.products = [...totalProduct];
-            resolve();
-        });
     }
 }
 

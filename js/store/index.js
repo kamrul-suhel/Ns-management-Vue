@@ -7,6 +7,7 @@ import customers from './modules/customer'
 import user from './modules/user'
 import saleAssistance from './modules/saleAssistance'
 import shop from './modules/shop'
+import company from './modules/company'
 
 Vue.use(Vuex);
 
@@ -65,7 +66,8 @@ const store = new Vuex.Store({
         customers,
         user,
         shop,
-        saleAssistance
+        saleAssistance,
+        company
     }
 });
 

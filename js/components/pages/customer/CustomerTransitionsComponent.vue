@@ -12,36 +12,44 @@
             <v-layout row wrap>
                 <v-flex xs3>
                     <v-card flat class="cyan lighten-1 white--text">
-                        <v-card-title>Total Customers</v-card-title>
+                        <v-card-title>Total Transition</v-card-title>
                         <v-card-text class="pt-0">
-                            <h2 class="display-2 white--text text-xs-center"><strong>350</strong></h2>
+                            <h2 class="display-2 white--text text-xs-center">
+                                <strong>{{ totalTransition }}</strong>
+                            </h2>
                         </v-card-text>
                     </v-card>
                 </v-flex>
 
                 <v-flex xs3>
                     <v-card flat class="light-blue white--text">
-                        <v-card-title>Active Customers</v-card-title>
+                        <v-card-title>Total</v-card-title>
                         <v-card-text class="pt-0">
-                            <h2 class="display-2 white--text text-xs-center"><strong>350</strong></h2>
+                            <h2 class="display-2 white--text text-xs-center">
+                                <strong>{{ credit }}</strong>
+                            </h2>
+                        </v-card-text>
+                    </v-card>
+                </v-flex>
+
+                <v-flex xs3>
+                    <v-card flat class="light-blue white--text">
+                        <v-card-title>Paid</v-card-title>
+                        <v-card-text class="pt-0">
+                            <h2 class="display-2 white--text text-xs-center">
+                                <strong>{{ debit }}</strong>
+                            </h2>
                         </v-card-text>
                     </v-card>
                 </v-flex>
 
                 <v-flex xs3>
                     <v-card flat class="light-green lighten-1 white--text">
-                        <v-card-title>Deactive Customer</v-card-title>
+                        <v-card-title>Due</v-card-title>
                         <v-card-text class="pt-0">
-                            <h2 class="display-2 white--text text-xs-center"><strong>350</strong></h2>
-                        </v-card-text>
-                    </v-card>
-                </v-flex>
-
-                <v-flex xs3>
-                    <v-card flat class="orange darken-1 white--text">
-                        <v-card-title>Highest Customer</v-card-title>
-                        <v-card-text class="pt-0">
-                            <h2 class="display-2 white--text text-xs-center"><strong>350</strong></h2>
+                            <h2 class="display-2 white--text text-xs-center">
+                                <strong>{{ balance }}</strong>
+                            </h2>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -54,67 +62,40 @@
                         raised
                         width="100%">
                     <v-card-title class="pb-0 pt-0">
-                        <v-btn dark fab small color="dark" @click="dialog = true">
-                            <v-icon>add</v-icon>
-                        </v-btn>
-
-                        <v-spacer></v-spacer>
-                        <v-text-field
-                                prepend-icon="search"
-                                label="Search"
-                                v-model="search"></v-text-field>
+                        <v-autocomplete
+                                color="dark"
+                                v-model="selectedCustomer"
+                                :items="customers"
+                                item-text="name"
+                                return-object
+                                label="Select A customer"
+                                persistent-hint
+                        ></v-autocomplete>
                     </v-card-title>
 
                     <v-card-text>
                         <v-data-table
                                 :headers="headers"
-                                :items="items"
-                                :search="search"
-                                :pagination.sync="pagination"
-                                :rows-per-page-items="row_per_page"
-                                item-key="name"
+                                :items="transitions"
+                                item-key="id"
+                                disable-initial-sort="true"
                         >
-
-                            <template slot="headers" slot-scope="props">
-                                <tr>
-                                    <th
-                                            v-for="header in props.headers"
-                                            :key="header.value"
-                                            :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                                            @click="changeSort(header.value)"
-                                    >
-                                        <v-icon small>arrow_upward</v-icon>
-                                        {{ header.text}}
-                                    </th>
-                                </tr>
-                            </template>
-
                             <template slot="items" slot-scope="props">
-                                <td class="text-xs-center">{{ props.item.name }}</td>
-                                <td class="text-xs-center">{{ props.item.phone }}</td>
-                                <td class="text-xs-center">{{ props.item.mobile }}</td>
-                                <td class="text-xs-center">{{ props.item.address }}</td>
-                                <td class="justify-start layout px-0">
-                                    <v-btn icon class="mx-0" @click="editItem(props.item)">
-                                        <v-icon color="dark">edit</v-icon>
-                                    </v-btn>
-                                    <v-btn icon class="mx-0" @click="viewTransition(props.item)">
-                                        <v-icon clor="dark">view_comfy</v-icon>
-                                    </v-btn>
-                                    <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-                                        <v-icon color="pink">delete</v-icon>
-                                    </v-btn>
-                                </td>
+                                <td>{{ props.item.particular }}</td>
+                                <td>{{ props.item.reference }}</td>
+                                <td>{{ props.item.remark }}</td>
+                                <td>TK. {{ props.item.debit }}</td>
+                                <td>TK. {{ props.item.credit }}</td>
+                                <td>TK. {{ props.item.balance }}</td>
+                                <td>{{ props.item.created_at | convertDate }}</td>
+                                <td></td>
                             </template>
-
-                            <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                                Your search for "{{ search }}" found no results.
-                            </v-alert>
 
                             <template slot="no-data">
-                                Sorry no products found
+                                No transition
                             </template>
                         </v-data-table>
+
                     </v-card-text>
                 </v-card>
             </v-layout>
@@ -122,86 +103,108 @@
     </div>
 </template>
 <script>
-    /* eslint-disable no-unreachable */
 
-    import axios from 'axios'
+    import {mapGetters} from 'vuex'
 
     export default {
         data: () => ({
-            dialog: true,
             search: '',
-            pagination: {
-                sortBy: 'name'
-            },
+
+            selectedCustomer:{},
 
             headers: [
                 {
-                    text: 'Name',
-                    value: 'name',
+                    text: 'Particular',
+                    value: 'particular',
                     sortable: true
                 },
 
                 {
-                    text: 'Phone',
-                    value: 'phone',
+                    text: 'Reference',
+                    value: 'reference',
                     sortable: false
                 },
+
                 {
-                    text: 'Mobile',
-                    value: 'mobile',
+                    text: 'Remarks',
+                    value: 'remarks',
                     sortable: false
                 },
+
                 {
-                    text: 'Address',
-                    value: 'address',
+                    text: 'Debit',
+                    value: 'debit',
+                    sortable: false
+                },
+
+                {
+                    text: 'Credit',
+                    value: 'credit',
                     sortable: true
                 },
+
                 {
-                    text: 'Actions'
+                    text: 'Balance',
+                    value: 'balance',
+                    sortable: true
+                },
+
+                {
+                    text: 'Date',
+                    value: 'date',
+                    sortable: true
+                },
+
+                {
+                    text: 'Actions',
+                    value:'actions'
                 }
             ],
             total_customer: '',
             items: [],
 
-            editedIndex: -1,
-            editedItem: {
-                id: '',
-                name: 'New title',
-                email: 'new Description',
-                phone: '01622296755',
-                mobile: '075493188',
-                address: 'available',
-                active: '1'
-            },
+
             active: [1,2],
 
-
-            defaultItem: {
-                name: '',
-                descriptin: ''
+            loading: false,
+            pagination: {
+                page: 1,
+                rowsPerPage: 10, // -1 for All
+                sortBy: 'name'
             },
-            row_per_page: [20, 30, 50, {'text': 'All', 'value': -1}],
-
+            totalRows: null,
+            row_per_page: [10, 20, 30, 40, 50, {'text': 'All', 'value': -1}],
         }),
 
         computed: {
-            formTitle() {
-                return this.editedIndex === -1 ? 'New Customer' : 'Edit Customer'
-            }
+
+            ...mapGetters({
+                customers: 'getAllCustomers',
+                transitions: 'getAllTransaction',
+                totalTransition: 'getTotalTransaction',
+                totalAmount: 'getCustomerTransactionTotal',
+                customerDue: 'getCustomerTransactionDue',
+                credit: 'getCustomerCredit',
+                debit: 'getCustomerDebit',
+                balance: 'getCustomerBalance'
+            }),
+
         },
 
         watch: {
-            dialog(val) {
-                val || this.close()
+            selectedCustomer(customer){
+                this.$store.dispatch('fetchSelectedCustomerTransactions',  customer)
             }
         },
 
         created() {
-            this.initialize()
+            this.$store.commit('setResetAllCustomerTransactionData');
+            this.initialize();
         },
 
         methods: {
             initialize() {
+                this.$store.dispatch('fetchAllCustomers')
                 // get all product
                 axios.get('/customers')
                     .then((response) => {
@@ -213,71 +216,6 @@
 
             },
 
-            editItem(item) {
-                // get selected categories & all categories
-                let url = '/api/products/' + item.id + '/categories'
-
-                axios.get(url)
-                    .then((response) => {
-                        let selectedCategories = response.data
-                        selectedCategories.forEach((value) => {
-                            let categories = {}
-                            categories.value = value.id
-                            categories.text = value.name
-                            this.selectedCategories.push(categories)
-                        })
-                    })
-                this.editedIndex = this.items.indexOf(item)
-                this.editedItem = Object.assign({}, item)
-                this.dialog = true
-            },
-
-            deleteItem(item) {
-                const index = this.items.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
-            },
-
-            close() {
-                this.dialog = false
-                this.selectedCategories = []
-                setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                }, 300)
-            },
-
-            save() {
-                let form = new FormData()
-                let url = '/customers'
-
-                form.append('name', this.editedItem.name)
-                form.append('email', this.editedItem.email)
-                form.append('phone', this.editedItem.phone)
-                form.append('mobile', this.editedItem.mobile)
-                form.append('address', this.editedItem.address)
-
-                if (this.selectedCategories) {
-                    form.append('categories', JSON.stringify(this.selectedCategories))
-                }
-
-                if (this.editedIndex !== -1) {
-                    // update product
-                    form.append('_method', 'PATCH')
-                    url = url + '/'+this.editedItem.id
-                    axios.post(url, form)
-                        .then((response) => {
-                            Object.assign(this.items[this.editedIndex], this.editedItem)
-                        })
-                } else {
-                    // create product
-                    axios.post(url, form)
-                        .then((response) => {
-                            this.items.push(response.data)
-                        })
-                }
-
-                this.close()
-            },
 
             changeSort(column) {
                 if (this.pagination.sortBy === column) {
@@ -286,10 +224,6 @@
                     this.pagination.sortBy = column
                     this.pagination.descending = false
                 }
-            },
-
-            viewTransition(){
-
             }
         }
     }

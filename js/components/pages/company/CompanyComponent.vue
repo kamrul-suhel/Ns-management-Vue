@@ -21,9 +21,9 @@
 
                 <v-flex xs3>
                     <v-card flat class="light-blue white--text">
-                        <v-card-title>Active Company</v-card-title>
+                        <v-card-title>Total Transition</v-card-title>
                         <v-card-text class="pt-0">
-                            <h2 class="display-2 white--text text-xs-center"><strong>350</strong></h2>
+                            <h2 class="display-2 white--text text-xs-center"><strong>{{ totalTransitions }}</strong></h2>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -211,7 +211,7 @@
                     <v-card-text>
                         <v-data-table
                                 :headers="headers"
-                                :items="items"
+                                :items="companies"
                                 :search="search"
                                 :pagination.sync="pagination"
                                 :rows-per-page-items="row_per_page"
@@ -278,6 +278,7 @@
     /* eslint-disable no-unreachable */
 
     import axios from 'axios'
+    import { mapGetters } from 'vuex'
 
     export default {
         data: () => ({
@@ -290,8 +291,6 @@
 
             snackbar: false,
             snackbar_message: '',
-
-            totalCompany: 0,
 
             headers: [
                 {
@@ -350,6 +349,13 @@
         }),
 
         computed: {
+            ...mapGetters({
+                companies: 'getCompanies',
+                totalCompany: 'getTotalCompany',
+                transitions: 'getCompanyTransitions',
+                totalTransitions: 'getTotalTransition'
+            }),
+
             formTitle() {
                 return this.editedIndex === -1 ? 'New Company' : 'Update Company'
             }
@@ -367,16 +373,8 @@
 
         methods: {
             initialize() {
-                // get all product
-                axios.get('/company')
-                    .then((response) => {
-                        this.items = response.data.companies;
-                        this.totalCompany = response.data.totalCompany
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
-
+                // get companies and update store
+                this.$store.dispatch('loadCompanies');
             },
 
             openDeleteDialog(deleteItem){

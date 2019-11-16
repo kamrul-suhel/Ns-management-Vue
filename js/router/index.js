@@ -7,6 +7,7 @@ import ProductEdit from '../components/pages/products/Edit'
 import DeleteProduct from '../components/pages/products/DeleteProduct'
 import TransactionComponent from '../components/pages/transaction/TransactionComponent'
 import CustomerComponent from '../components/pages/customer/CustomerComponent'
+import CustomerTransitionsComponent from '../components/pages/customer/CustomerTransitionsComponent'
 import ShopComponent from '../components/pages/shop/ShopComponent'
 import CreateTransaction from '../components/pages/transaction/CreateTransactionComponent'
 import CreateDueTransaction from '../components/pages/transaction/CreateDueTransactionComponent'
@@ -28,6 +29,7 @@ import CompanyComponent from '../components/pages/company/CompanyComponent'
 import CompanyTransaction from '../components/pages/company/CompanyTransitionsComponent'
 import AddCompanyTransaction from '../components/pages/company/transition/Add'
 import CreateSaleAssistanceComponent from '../components/pages/sale-assistance/CreateSaleAssistanceComponent'
+import UpdateSaleAssistanceComponent from "../components/pages/sale-assistance/UpdateSaleAssistanceComponent";
 
 Vue.use(Router)
 
@@ -111,6 +113,12 @@ const routes = [
     },
 
     {
+        path: '/sale-assistance/update',
+        name: 'sale_assistance_update',
+        component: UpdateSaleAssistanceComponent
+    },
+
+    {
         path:'/sale-return',
         name: 'saleReturn',
         component: SaleReturn
@@ -125,6 +133,11 @@ const routes = [
         path: '/customers/:id/transitions',
         name: 'customers_transitions',
         component: CustomerComponent
+    },
+    {
+        path: '/customers/ledger',
+        name: 'customer_ledger',
+        component: CustomerTransitionsComponent
     },
 
     {

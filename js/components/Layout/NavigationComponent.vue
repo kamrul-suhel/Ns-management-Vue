@@ -12,7 +12,7 @@
             <v-list-tile class="header-section">
                 <v-list-tile-title>
                     <div class="store-logo">
-                        <img src="/images/xmlogo.png"/>
+                        <img src="/images/sh-tel.gif"/>
                     </div>
                 </v-list-tile-title>
             </v-list-tile>
@@ -132,22 +132,15 @@
                         navs: [
                             {
                                 icon: 'compare_arrows',
-                                text: 'Sale Assistance',
+                                text: 'Create Record',
                                 link: 'sale_assistance_create',
                                 access: 'staff'
                             },
 
                             {
                                 icon: 'compare_arrows',
-                                text: 'Sale product',
-                                link: 'create_transaction',
-                                access: 'staff'
-                            },
-
-                            {
-                                icon: 'compare_arrows',
-                                text: 'Sale Return',
-                                link: 'saleReturn',
+                                text: 'Update record',
+                                link: 'sale_assistance_update',
                                 access: 'staff'
                             }
                         ]
@@ -167,9 +160,9 @@
 
                             {
                                 icon: 'people',
-                                text: 'Customer Laser',
-                                link: 'accounting_customer_transaction',
-                                access: 'staff'
+                                text: 'Customer Ledger',
+                                link: 'customer_ledger',
+                                access: 'admin'
                             }
 
                         ]
