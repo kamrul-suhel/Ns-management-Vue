@@ -21,8 +21,16 @@
                 <v-btn small
                        icon
                        flat
+                       color="success"
+                       @click="onTransaction(props.item)">
+                    <v-icon>add_to_queue</v-icon>
+                </v-btn>
+
+                <v-btn small
+                       icon
+                       flat
                        color="error"
-                        @click="onRemoveProduct(props.item)">
+                       @click="onRemoveProduct(props.item)">
                     <v-icon>delete</v-icon>
                 </v-btn>
             </td>
@@ -35,6 +43,10 @@
     import {mapGetters} from 'vuex'
 
     export default {
+        props:{
+            saleAssistant: Object
+        },
+
         data() {
             return {
                 headers: [
@@ -81,13 +93,22 @@
         },
 
         created() {
-            console.log('produc tis;: ', this.product);
         },
 
         methods: {
 
             onRemoveProduct(product) {
                 this.$store.commit('removeSaleAssistantProduct', product);
+            },
+
+            onTransaction(product){
+                this.$router.push({
+                    name: 'sale_assistance_transaction',
+                    params:{
+                        staffId: this.saleAssistant.id,
+                        barcode: product.barcode
+                    }
+                })
             }
         }
     }

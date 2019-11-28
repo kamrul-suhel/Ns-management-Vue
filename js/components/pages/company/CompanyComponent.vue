@@ -174,7 +174,9 @@
         </v-dialog>
 
 
-        <v-dialog v-model="deleteDialog" persistent max-width="290">
+        <v-dialog v-model="deleteDialog"
+                  persistent
+                  max-width="290">
             <v-card color="error">
                 <v-card-text>
                     <div class="text-xs-center"><v-icon color="white" size="50">warning</v-icon></div>
@@ -402,7 +404,7 @@
 
             editItem(item) {
                 // get selected categories & all categories
-                this.editedIndex = this.items.indexOf(item);
+                this.editedIndex = this.companies.indexOf(item);
                 this.editedItem = Object.assign({}, item);
                 this.dialog = true
             },
@@ -428,8 +430,8 @@
                     url = url + '/'+this.editedItem.id;
                     axios.post(url, form)
                         .then((response) => {
-                            Object.assign(this.items[this.editedIndex], this.editedItem);
-                            this.snackbar_message = 'Company '+this.editedItem.name + ' successfully updated.';
+                            this.initialize()
+                            this.snackbar_message = 'Company '+ this.editedItem.name + ' successfully updated.';
                             this.snackbar = true;
                             this.close();
                         })
@@ -437,7 +439,7 @@
                     // create product
                     axios.post(url, form)
                         .then((response) => {
-                            this.items.push(response.data);
+                            this.initialize()
                             this.snackbar_message = 'Company '+this.editedItem.name + ' successfully created.';
                             this.snackbar = true;
                             this.close()

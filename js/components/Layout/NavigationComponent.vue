@@ -40,6 +40,7 @@
                         v-for="(nav, i) in navs.navs"
                         :key="i"
                         @click="onPageChange(nav)"
+                        :class="nav.class"
                         v-if="Object.prototype.hasOwnProperty.call(nav, 'access') || role === 'admin'"
                 >
                     <v-list-tile-title v-text="nav.text"></v-list-tile-title>
@@ -142,6 +143,14 @@
                                 text: 'Update record',
                                 link: 'sale_assistance_update',
                                 access: 'staff'
+                            },
+
+                            {
+                                icon: 'compare_arrows',
+                                text: 'Sale assistant Transaction',
+                                link: 'sale_assistance_transaction',
+                                class:'d-none',
+                                access: 'admin'
                             }
                         ]
                     },

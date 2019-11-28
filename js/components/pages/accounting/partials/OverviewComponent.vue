@@ -230,7 +230,7 @@
             }),
 
             totalProfiteAll(){
-                return Number(this.afterExpenseProfit) - Number(this.paymentDue);
+                return this.afterExpenseProfit;
             }
         },
 

@@ -3,11 +3,15 @@ const state = {
     totalCompany : 0,
     selectedCompany: {},
     transitions:[],
-    totalTransitions: 0
-
+    totalTransitions: 0,
+    previousBalance:0
 }
 
 const getters = {
+    getCompanyPreviousBalance(state){
+        return state.previousBalance
+    },
+
     getCompanies(state) {
         return state.companies;
     },
@@ -30,6 +34,10 @@ const getters = {
 }
 
 const mutations = {
+    setPreviousBalance(state, balance){
+        state.previousBalance = balance
+    },
+
     setCompanies(state, companies){
         state.companies = [...companies];
     },
@@ -64,6 +72,7 @@ const actions = {
                     commit('setCompanies', []);
                     commit('setTotalCompany', 0);
                     commit('setCompanyTransitions', []);
+
                 }
             })
             .catch((error) => {
@@ -79,10 +88,12 @@ const actions = {
                 commit('setCompanyTransitions', response.data.companyTransaction);
                 commit('setCompanyTotalTransition', response.data.totalTransitions)
                 commit('setCompanyTransitions', response.data.allTransition);
+                commit('setPreviousBalance', response.data.balance)
             }else{
-                commit('setCompanyTransitions', []);
+                commit('setCompanyTransitions', [])
                 commit('setCompanyTotalTransition', 0)
-                commit('setCompanyTransitions', []);
+                commit('setCompanyTransitions', [])
+                commit('setPreviousBalance', 0)
             }
         })
     }

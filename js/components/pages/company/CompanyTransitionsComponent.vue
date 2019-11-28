@@ -69,7 +69,10 @@
                                         item-text="name"
                                         item-value="id"
                                         label="Select A Company"
+                                        :hint="`previous balance: ${previousBalance}`"
+                                        persistent-hint
                                         required
+                                        :disabled="editedIndex !== -1"
                                         v-model="selectedCompany"></v-select>
                             </v-flex>
 
@@ -110,6 +113,7 @@
                                         dark
                                         color="dark"
                                         label="Debit"
+                                        :disabled="this.editedIndex !== -1"
                                         type="number"
                                         hint="How much"
                                         @input="onDebitUpdate()"
@@ -122,6 +126,7 @@
                                         dark
                                         color="dark"
                                         label="Credit"
+                                        :disabled="editedIndex !== -1"
                                         hint="Credit"
                                         type="number"
                                         @input="onCreditUpdate()"
@@ -169,8 +174,11 @@
         <v-dialog v-model="deleteDialog" persistent max-width="290">
             <v-card color="error">
                 <v-card-text>
-                    <div class="text-xs-center"><v-icon color="white" size="50">warning</v-icon></div>
-                    <p class="text-xs-center">Are you sure you want to delete {{deleteItem.title}} {{ deleteItem.description}}</p>
+                    <div class="text-xs-center">
+                        <v-icon color="white" size="50">warning</v-icon>
+                    </div>
+                    <p class="text-xs-center">Are you sure you want to delete {{deleteItem.title}} {{
+                        deleteItem.description}}</p>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -232,23 +240,21 @@
                             </template>
 
                             <template slot="items" slot-scope="props">
-                                <td class="text-xs-center">{{ getNestedItem(props.item, 'name') }}</td>
-                                <td class="text-xs-center">{{ getNestedItem(props.item, 'mobile') }}</td>
+                                <td class="text-xs-center">{{ props.item.reference }}</td>
+                                <td class="text-xs-center">{{ props.item.remarks }}</td>
                                 <td class="text-xs-center">{{ props.item.payment_type }}</td>
                                 <td class="text-xs-center">TK.{{ props.item.debit }}</td>
                                 <td class="text-xs-center">TK.{{ props.item.credit }}</td>
                                 <td class="text-xs-center">TK.{{ props.item.balance }}</td>
-                                <td class="text-xs-center">{{ convertDate(props.item.created_at) }}</td>
                                 <td class="text-xs-center">{{ props.item.manuel_date }}</td>
+                                <td class="text-xs-center">{{ convertDate(props.item.created_at) }}</td>
                                 <td class="justify-start layout px-0">
                                     <v-btn icon class="mx-0" @click="editItem(props.item)">
                                         <v-icon color="dark">edit</v-icon>
                                     </v-btn>
+
                                     <v-btn icon class="mx-0" @click="viewTransition(props.item)">
                                         <v-icon clor="dark">view_comfy</v-icon>
-                                    </v-btn>
-                                    <v-btn icon class="mx-0" @click="openDeleteDialog(props.item)">
-                                        <v-icon color="pink">delete</v-icon>
                                     </v-btn>
                                 </td>
                             </template>
@@ -286,7 +292,7 @@
     export default {
         data: () => ({
             dialog: false,
-            deleteDialog:false,
+            deleteDialog: false,
             search: '',
             pagination: {
                 sortBy: 'name'
@@ -297,45 +303,50 @@
 
             headers: [
                 {
-                    text: 'Name',
-                    value: 'name',
-                    sortable: true
+                    text: 'Reference',
+                    value: 'reference',
+                    sortable: false
                 },
 
                 {
-                    text: 'Mobile',
-                    value: 'mobile',
+                    text: 'Remarks',
+                    value: 'remarks',
                     sortable: false
                 },
+
                 {
                     text: 'Payment Type',
                     value: 'payment_type',
-                    sortable: true
+                    sortable: false
                 },
+
                 {
                     text: 'Debit',
                     value: 'debit',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     text: 'Credit',
                     value: 'credit',
-                    sortable: true
+                    sortable:false
                 },
+
                 {
                     text: 'Balance',
                     value: 'balance',
-                    sortable: true
+                    sortable: false
                 },
-                {
-                    text: 'Date',
-                    value: 'created_at',
-                    sortable: true
-                },
+
                 {
                     text: 'Manuel date',
                     value: 'menuel_date',
-                    sortable: true
+                    sortable: false
+                },
+
+                {
+                    text: 'Date',
+                    value: 'created_at',
+                    sortable: false
                 },
 
 
@@ -347,42 +358,43 @@
             items: [],
 
             editedIndex: -1,
-                editedItem: {
-                    id: '',
-                    company_id:'',
-                    payment_type:'',
-                    reference:'',
-                    remarks:'',
-                    debit:'',
-                    credit:'',
-                    balance:'',
-                    manuel_date:'',
-                },
+            editedItem: {
+                id: '',
+                company_id: '',
+                payment_type: '',
+                reference: '',
+                remarks: '',
+                debit: 0,
+                credit: 0,
+                balance: 0,
+                manuel_date: '',
+            },
 
-            selectedCompany:'',
-            payment_type:['cash', 'cheque', 'product', 'other'],
+            selectedCompany: '',
+            payment_type: ['cash', 'cheque', 'product', 'other'],
             defaultItem: {
                 id: '',
-                payment_type:'cash',
-                reference:'',
-                remarks:'',
-                debit:0,
-                credit:0,
-                balance:'',
-                manuel_date:''
+                payment_type: 'cash',
+                reference: '',
+                remarks: '',
+                debit: 0,
+                credit: 0,
+                balance: 0,
+                manuel_date: ''
             },
             row_per_page: [20, 30, 50, {'text': 'All', 'value': -1}],
 
-            deleteItem:{},
-            balance:0,
+            deleteItem: {},
+            balance: 0,
 
         }),
 
         computed: {
             ...mapGetters({
-                companies : 'getCompanies',
+                companies: 'getCompanies',
                 totalCompany: 'getTotalCompany',
-                transitions: 'getCompanyTransitions'
+                transitions: 'getCompanyTransitions',
+                previousBalance: 'getCompanyPreviousBalance'
             }),
 
             formTitle() {
@@ -395,8 +407,19 @@
                 val || this.close()
             },
 
-            selectedCompany(value){
-                this.$store.dispatch('loadCompanyTransitions',{companyId: value})
+            selectedCompany(value) {
+                this.$store.dispatch('loadCompanyTransitions', {companyId: value})
+            },
+
+            previousBalance(value) {
+                this.balance = value
+
+                let editedItem = {
+                    ...this.editedItem,
+                    balance: Number(value)
+                }
+                this.editedItem = {...editedItem}
+                console.log('edited item is: ', this.editedItem)
             }
         },
 
@@ -410,34 +433,31 @@
                 this.$store.dispatch('loadCompanies')
             },
 
-            getNestedItem(item, name){
-                if(item.company){
+            getNestedItem(item, name) {
+                if (item.company) {
                     return item.company[name]
                 }
                 return 'unknown';
             },
 
-            onDebitUpdate(){
+            onDebitUpdate() {
                 this.editedItem.balance = Number(this.balance) + Number(this.editedItem.credit) - Number(this.editedItem.debit);
             },
 
-            onCreditUpdate(){
+            onCreditUpdate() {
                 this.editedItem.balance = Number(this.balance) + Number(this.editedItem.credit) - Number(this.editedItem.debit);
             },
 
 
-            changeBalance(){
-                console.log(this.editedItem.balance);
-              this.editedItem.balance = this.editedItem.credit - this.editedItem.debit;
+            changeBalance() {
+                this.editedItem.balance = this.editedItem.credit - this.editedItem.debit;
             },
 
-            onCompanyChange(value){
-
-                console.log(value);
+            onCompanyChange(value) {
             },
 
-            convertNumber(value){
-                if(value === ''){
+            convertNumber(value) {
+                if (value === '') {
                     return parseFloat('0');
                 }
 
@@ -445,13 +465,13 @@
             },
 
 
-            openDeleteDialog(deleteItem){
+            openDeleteDialog(deleteItem) {
                 this.deleteItem = deleteItem;
                 this.deleteDialog = true;
             },
 
-            deleteItemD () {
-                let url = 'api/ctransaction/'+this.deleteItem.id;
+            deleteItemD() {
+                let url = 'api/ctransaction/' + this.deleteItem.id;
                 axios.delete(url).then((response) => {
                     this.deleteDialog = false;
                     const index = this.items.indexOf(this.deleteItem)
@@ -462,7 +482,6 @@
             close() {
                 this.dialog = false
                 this.selectedCategories = [];
-                this.selectedCompany = '',
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem);
                     this.editedIndex = -1
@@ -471,7 +490,7 @@
 
             editItem(item) {
                 // get selected categories & all categories
-                this.editedIndex = this.items.indexOf(item);
+                this.editedIndex = this.transitions.indexOf(item);
                 this.editedItem = Object.assign({}, item);
                 this.dialog = true
             },
@@ -482,7 +501,7 @@
                 form.append('company_id', this.selectedCompany);
                 form.append('store_id', this.$store.getters.getSelectedShopId);
                 form.append('payment_type', this.editedItem.payment_type);
-                form.append('emreferenceail', this.editedItem.reference);
+                form.append('reference', this.editedItem.reference);
                 form.append('remarks', this.editedItem.remarks);
                 form.append('debit', this.editedItem.debit);
                 form.append('credit', this.editedItem.credit);
@@ -492,11 +511,11 @@
                 if (this.editedIndex !== -1) {
                     // update product
                     form.append('_method', 'PATCH');
-                    url = url + '/'+this.editedItem.id;
+                    url = url + '/' + this.editedItem.id;
                     axios.post(url, form)
                         .then((response) => {
-                            Object.assign(this.items[this.editedIndex], this.editedItem);
-                            this.snackbar_message = 'Transaction '+this.editedItem.name + ' successfully updated.';
+                            this.$store.dispatch('loadCompanyTransitions', {companyId: this.selectedCompany})
+                            this.snackbar_message = 'Transaction ' + this.editedItem.name + ' successfully updated.';
                             this.snackbar = true;
                             this.close();
                         })
@@ -504,8 +523,8 @@
                     // create product
                     axios.post(url, form)
                         .then((response) => {
-                            this.items.push(response.data);
-                            this.snackbar_message = 'Transaction '+this.editedItem.name + ' successfully created.';
+                            this.$store.dispatch('loadCompanyTransitions', {companyId: this.selectedCompany})
+                            this.snackbar_message = 'Transaction ' + this.editedItem.name + ' successfully created.';
                             this.snackbar = true;
                             this.close();
                         })
@@ -522,12 +541,12 @@
                 }
             },
 
-            viewTransition(){
+            viewTransition() {
 
             },
 
-            convertDate(date){
-                if(date){
+            convertDate(date) {
+                if (date) {
                     var current_date = new Date(date.replace(/-/g, "/"));
                     var daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
                     var monthsOfYear = ["January", "February", "March", "April", "May", "June", "July", "August",

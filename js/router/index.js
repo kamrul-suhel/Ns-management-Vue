@@ -30,6 +30,7 @@ import CompanyTransaction from '../components/pages/company/CompanyTransitionsCo
 import AddCompanyTransaction from '../components/pages/company/transition/Add'
 import CreateSaleAssistanceComponent from '../components/pages/sale-assistance/CreateSaleAssistanceComponent'
 import UpdateSaleAssistanceComponent from "../components/pages/sale-assistance/UpdateSaleAssistanceComponent";
+import CreateSaleAssistanceTransition from "../components/pages/sale-assistance/CreateTransaction";
 
 Vue.use(Router)
 
@@ -116,6 +117,12 @@ const routes = [
         path: '/sale-assistance/update',
         name: 'sale_assistance_update',
         component: UpdateSaleAssistanceComponent
+    },
+
+    {
+        path: '/sale-assistance/:staffId/sale/:barcode',
+        name: 'sale_assistance_transaction',
+        component: CreateSaleAssistanceTransition
     },
 
     {

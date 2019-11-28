@@ -2,7 +2,13 @@
     <v-layout row wrap>
 
         <v-flex xs6>
+            <template v-if="this.saleAssistant">
+                <h3>{{selectedProduct.name}}</h3>
+                <span>Per unit sale price:  {{ selectedProduct.sale_price}}</span>
+            </template>
+
             <v-autocomplete
+                    v-else
                     dark
                     color="dark"
                     label="Select Product"
@@ -20,6 +26,7 @@
 
         <v-flex xs6 :style="{position: 'relative'}">
             <v-btn
+                    v-if="!this.saleAssistant"
                     class="remove-item"
                     absolute
                     dark
@@ -134,7 +141,11 @@
             }
         },
 
-        props: ['index', 'code'],
+        props: [
+            'index',
+            'code',
+            'saleAssistant'
+        ],
         watch: {
             selectedProduct(product) {
                 if (product) {
@@ -186,6 +197,8 @@
                                 TransactionEventBus.removeProductByCode(this.code);
                                 return;
                             }
+
+                            console.log('Product is: ', response.data);
 
                             this.selectedProduct = {...response.data.selected_product};
                             this.products = [...response.data.products];

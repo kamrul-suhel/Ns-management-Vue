@@ -10,7 +10,7 @@
                                 ref="transactionForm"
                                 v-model="valid"
                                 lazy-validation>
-                                lazy-validation>
+                            lazy-validation>
                             <h2>Sale assistance</h2>
                             <v-container grid-list-md>
                                 <v-layout row wrap>
@@ -54,14 +54,14 @@
                                             </template>
                                             <v-date-picker v-model="date" no-title scrollable>
                                                 <v-spacer></v-spacer>
-                                                <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
+                                                <v-btn flat color="primary" @click="onClearDate()">Clear</v-btn>
                                                 <v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>
                                             </v-date-picker>
                                         </v-menu>
                                     </v-flex>
                                 </v-layout>
 
-                                <product-component></product-component>
+                                <product-component :saleAssistant="selectedSaleAssistant"></product-component>
                             </v-container>
                         </v-form>
 
@@ -88,17 +88,36 @@
 
         data: () => ({
 
-            customers: [{text: 'No customer', value: 1}],
+            customers: [
+                {
+                    text: 'No customer',
+                    value: 1
+                }
+            ],
             selectedCustomer: {},
             previousDue: 0,
             payment_due: '',
             paid: '',
             discount: 0,
 
-            paymentStatus: [{text: 'paid', value: 1}, {text: 'Due', value: 2}, {
-                text: 'Half paid',
-                value: 3
-            }, {text: 'Pending', value: 4}],
+            paymentStatus: [
+                {
+                    text: 'paid',
+                    value: 1
+                },
+                {
+                    text: 'Due',
+                    value: 2
+                },
+                {
+                    text: 'Half paid',
+                    value: 3
+                },
+                {
+                    text: 'Pending',
+                    value: 4
+                }
+            ],
             selectedPaymentStatus: 1,
             active: [1, 2],
 
@@ -137,17 +156,18 @@
 
 
             saleProductErrorMessage: false,
-            date: new Date().toISOString().substr(0, 10),
+            // date: new Date().toISOString().substr(0, 10),
+            date: null,
             pickerDate: null,
             menu: false,
         }),
 
         computed: {
-            selectedSaleAssistant:{
-                get(){
+            selectedSaleAssistant: {
+                get() {
                     return this.$store.getters.getSelectedSaleAssistant;
                 },
-                set(value){
+                set(value) {
                     const date = this.date;
                     this.$store.dispatch('getSaleAssistantProducts', {selectedUser: value, date: date})
                 }
@@ -173,7 +193,7 @@
                 this.current_product_quantity = change_product.quantity;
             },
 
-            date(date){
+            date(date) {
                 this.$store.dispatch('getSaleAssistantProducts', {selectedUser: this.selectedSaleAssistant, date: date})
             },
 
@@ -385,6 +405,11 @@
             },
             resetValidation() {
                 this.$refs.form.resetValidation()
+            },
+
+            onClearDate(){
+                this.date = null
+                this.menu = false
             }
         },
 
