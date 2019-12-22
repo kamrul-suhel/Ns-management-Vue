@@ -8,6 +8,7 @@ import DeleteProduct from '../components/pages/products/DeleteProduct'
 import TransactionComponent from '../components/pages/transaction/TransactionComponent'
 import CustomerComponent from '../components/pages/customer/CustomerComponent'
 import CustomerTransitionsComponent from '../components/pages/customer/CustomerTransitionsComponent'
+import CreateCustomerLedger from '../components/pages/customer/CreateCustomerLedger'
 import ShopComponent from '../components/pages/shop/ShopComponent'
 import CreateTransaction from '../components/pages/transaction/CreateTransactionComponent'
 import CreateDueTransaction from '../components/pages/transaction/CreateDueTransactionComponent'
@@ -27,6 +28,8 @@ import BankAccountComponent from '../components/pages/bank/BankAccountComponent'
 import AccountTransactionComponent from '../components/pages/bank/AccountTransactionComponent'
 import CompanyComponent from '../components/pages/company/CompanyComponent'
 import CompanyTransaction from '../components/pages/company/CompanyTransitionsComponent'
+import CompanyReturnCreate from '../components/pages/company/CompanyReturnCreate'
+import CompanyReturnList from '../components/pages/company/CompanyReturnList'
 import AddCompanyTransaction from '../components/pages/company/transition/Add'
 import CreateSaleAssistanceComponent from '../components/pages/sale-assistance/CreateSaleAssistanceComponent'
 import UpdateSaleAssistanceComponent from "../components/pages/sale-assistance/UpdateSaleAssistanceComponent";
@@ -146,6 +149,11 @@ const routes = [
         name: 'customer_ledger',
         component: CustomerTransitionsComponent
     },
+    {
+        path: '/customers/ledger/create',
+        name: 'customer_ledger_create',
+        component: CreateCustomerLedger
+    },
 
     {
         path: '/expense',
@@ -157,6 +165,18 @@ const routes = [
         path: '/company',
         name: 'company',
         component: CompanyComponent
+    },
+
+    {
+        path: '/company/return/add',
+        name: 'companyReturnCreate',
+        component: CompanyReturnCreate
+    },
+
+    {
+        path: '/company/return/list',
+        name: 'companyReturnList',
+        component: CompanyReturnList
     },
 
     {

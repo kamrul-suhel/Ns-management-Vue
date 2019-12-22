@@ -81,7 +81,7 @@
                                             color="dark"
                                             label="Amount of pay"
                                             disabled
-                                            v-model="paid">
+                                            v-model="debit">
                                     </v-text-field>
                                 </v-flex>
 
@@ -126,9 +126,9 @@
                                     <v-text-field
                                             dark
                                             color="dark"
-                                            label="Amount of pay"
+                                            label="Debit"
                                             type="number"
-                                            v-model="paid">
+                                            v-model="debit">
                                     </v-text-field>
                                 </v-flex>
 
@@ -136,9 +136,9 @@
                                     <v-text-field
                                             dark
                                             color="dark"
-                                            label="Amount of given"
+                                            label="Credit"
                                             type="number"
-                                            v-model="given">
+                                            v-model="credit">
                                     </v-text-field>
                                 </v-flex>
 
@@ -180,8 +180,8 @@
             customers: [{text: 'No customer', value: 1}],
             selectedCustomer:{},
             payment_due:'',
-            paid: 0,
-            given:0,
+            debit: 0,
+            credit:0,
             previousDue: 0,
             newAmountDue:0,
 
@@ -218,7 +218,7 @@
                 })
             },
 
-            paid(val){
+            debit(val){
                 this.newAmountDue = Number(this.previousDue) - Number(val);
             },
 
@@ -260,8 +260,8 @@
 
                 form.append('transactions', JSON.stringify(this.transactions));
 
-                form.append('paid', this.paid);
-                form.append('given', this.given);
+                form.append('debit', this.debit);
+                form.append('credit', this.credit);
                 form.append('due', this.newAmountDue);
                 form.append('particular', this.particular);
                 form.append('remark', this.remark);
@@ -285,7 +285,7 @@
                 this.transactions.forEach((transaction)=>{
                     totalPay += +transaction.newamount;
                 })
-                this.paid = totalPay;
+                this.debit = totalPay;
             }
         }
     }

@@ -78,7 +78,7 @@
                                 :headers="headers"
                                 :items="transitions"
                                 item-key="id"
-                                disable-initial-sort="true"
+                                :disable-initial-sort="true"
                         >
                             <template slot="items" slot-scope="props">
                                 <td>{{ props.item.particular }}</td>

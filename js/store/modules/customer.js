@@ -1,3 +1,5 @@
+import logger from "vuex/dist/logger";
+
 const state = {
     allCustomers: [],
     totalTransaction: 0,
@@ -7,9 +9,14 @@ const state = {
     customerCredit: 0,
     customerDebit: 0,
     customerBalance: 0,
+    customerLastLedger:{}
 }
 
 const getters = {
+    getCustomerLastLedger(state){
+        return state.customerLastLedger
+    },
+
     getAllCustomers(state) {
         return state.allCustomers;
     },
@@ -45,6 +52,9 @@ const getters = {
 }
 
 const mutations = {
+    setCustomerLastLedger(state, lastLedger){
+        state.customerLastLedger = {...lastLedger}
+    },
     setAllCustomers(state, customers) {
         state.allCustomers = [...customers];
     },
@@ -112,6 +122,7 @@ const actions = {
             commit('setCustomerDebit', response.data.debit);
             commit('setCustomerCredit', response.data.credit);
             commit('setCustomerBalance', response.data.balance);
+            commit('setCustomerLastLedger', response.data.last_ledger)
         });
     }
 }

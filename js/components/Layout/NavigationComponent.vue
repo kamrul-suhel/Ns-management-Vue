@@ -172,6 +172,13 @@
                                 text: 'Customer Ledger',
                                 link: 'customer_ledger',
                                 access: 'admin'
+                            },
+
+                            {
+                                icon: 'people',
+                                text: 'Create Ledger',
+                                link: 'customer_ledger_create',
+                                access: 'admin'
                             }
 
                         ]
@@ -213,6 +220,18 @@
                                 icon: 'compare_arrows',
                                 text: 'C. Transaction',
                                 link: 'ctransaction',
+                            },
+
+                            {
+                                icon: 'replay',
+                                text: 'Company Return',
+                                link: 'companyReturnCreate',
+                            },
+
+                            {
+                                icon: 'replay',
+                                text: 'Company Return List',
+                                link: 'companyReturnList',
                             }
 
                         ]

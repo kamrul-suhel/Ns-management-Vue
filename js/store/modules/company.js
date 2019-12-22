@@ -4,10 +4,20 @@ const state = {
     selectedCompany: {},
     transitions:[],
     totalTransitions: 0,
-    previousBalance:0
+    previousBalance:0,
+    products:[],
+    productSerials:[]
 }
 
 const getters = {
+    getProductSerials(state){
+        return state.productSerials
+    },
+
+    getCompanyProducts(state){
+        return state.products
+    },
+
     getCompanyPreviousBalance(state){
         return state.previousBalance
     },
@@ -34,6 +44,14 @@ const getters = {
 }
 
 const mutations = {
+    setProductSerialsByCompany(state, serials){
+        state.productSerials = [...serials];
+    },
+
+    setCompanyProducts(state, products){
+        state.products = [...products]
+    },
+
     setPreviousBalance(state, balance){
         state.previousBalance = balance
     },
@@ -78,6 +96,20 @@ const actions = {
             .catch((error) => {
                 console.log(error)
             })
+    },
+
+    fetchCompanyProducts({commit}, payload){
+        const URL = `/api/companies/${payload.companyId}/product`
+        axios.get(URL).then((response)=>{
+            commit('setCompanyProducts', response.data.products)
+        })
+    },
+
+    fetchProductSerialForCompany({commit}, payload){
+        const URL = `/api/companies/product/${payload.productId}`
+        axios.get(URL).then((response)=> {
+            commit('setProductSerialsByCompany', response.data.serials)
+        })
     },
 
     loadCompanyTransitions({ commit }, payload){

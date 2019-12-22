@@ -106,6 +106,10 @@
                                         {{ getPaymentStatus(props.item.payment_status) }}
                                     </td>
 
+                                    <td class="text-xs-center">
+                                        {{ getStatus(props.item.status) }}
+                                    </td>
+
                                     <td class="text-xs-center">TK.
                                         {{ props.item.discount_amount ? price_format(props.item.discount_amount): 0 }}
                                     </td>
@@ -169,7 +173,8 @@
                                                 </v-btn-toggle>
                                             </v-flex>
 
-                                            <v-flex xs6 class="mb-3" v-if="role === 'admin'">
+                                            <v-flex xs6 class="mb-3"
+                                                    v-if="(role === 'admin') && (props.item.status != 3)">
                                                 <h3>Approved transaction</h3>
                                                 <v-btn-toggle v-model="props.item.status"
                                                               mandatory
@@ -184,7 +189,8 @@
                                                 </v-btn-toggle>
                                             </v-flex>
 
-                                            <v-flex xs6 class="mb-3" v-if="props.item.bkash && props.item.bkash.amount">
+                                            <v-flex xs6 class="mb-3"
+                                                    v-if="props.item.bkash && props.item.bkash.amount">
                                                 <h3>Bkash</h3>
                                                 <v-btn-toggle v-model="props.item.bkash.status"
                                                               class="mb-3"
@@ -338,6 +344,12 @@
                     text: 'Product',
                     value: 'product',
                     sortable: true
+                },
+
+                {
+                    text: 'Payment Status',
+                    value: 'payment_status',
+                    sortable: false
                 },
 
                 {
@@ -630,6 +642,28 @@
                 return status;
             },
 
+            getStatus(status){
+                let statusString = ''
+                switch(status){
+                    case 0:
+                        statusString = 'Not Approved'
+                        break;
+
+                    case 1:
+                       statusString = 'Sold'
+                       break;
+
+                    case 2:
+                        statusString = 'Due'
+                        break;
+
+                    case 3:
+                        statusString = 'Return'
+                }
+
+                return statusString
+            },
+
             onDueTransaction() {
                 this.$router.push({name: 'create_due_transaction'});
             },
@@ -681,12 +715,10 @@
             },
 
             acceptDenyTransaction(transaction) {
-
-                let transactionId = transaction.id;
+                const transactionId = transaction.id;
 
                 let url = 'api/transactions/' + transactionId;
                 axios.put(url, {status: transaction.status, user_id: this.userId}).then((response) => {
-                    console.log("response is; ", response);
                 });
 
             },
