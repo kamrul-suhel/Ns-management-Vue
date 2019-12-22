@@ -8,6 +8,7 @@ import user from './modules/user'
 import saleAssistance from './modules/saleAssistance'
 import shop from './modules/shop'
 import company from './modules/company'
+import Drawer from './modules/drawer'
 
 Vue.use(Vuex);
 
@@ -67,7 +68,8 @@ const store = new Vuex.Store({
         user,
         shop,
         saleAssistance,
-        company
+        company,
+        Drawer
     }
 });
 

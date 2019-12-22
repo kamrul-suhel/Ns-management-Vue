@@ -128,7 +128,7 @@
             snackbar: false,
             snackbar_message: '',
             selectedCompany: '',
-            selectedProduct: '',
+            selectedProduct: {},
             headers: [
                 {
                     text: 'Action',
@@ -213,8 +213,7 @@
 
             onReturnProduct() {
                 let companyReturn = new FormData()
-                let quantity = 0
-                companyReturn.append('product_id', this.selectedProduct.id)
+                companyReturn.append('product_id', this.selectedProduct.product_id)
                 companyReturn.append('company_id', this.selectedCompany)
                 companyReturn.append('note', this.note)
                 companyReturn.append('is_barcode', this.selectedProduct.is_barcode)
@@ -231,6 +230,10 @@
                 axios.post('/api/companies/return', companyReturn).then((response) => {
                     this.snackbar_message = this.selectedProduct.name + ' successfully  returned'
                     this.snackbar = true;
+                    setTimeout(()=>{
+                        this.$router.push({name: 'companyReturnList'})
+                    }, 3000)
+
                 })
             },
 

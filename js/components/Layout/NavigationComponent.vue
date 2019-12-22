@@ -1,10 +1,9 @@
 <template>
-
     <v-navigation-drawer
             v-if="isLogin"
             fixed
             clipped
-            v-model="drawer"
+            v-model="isOpen"
             app
             width="250"
     >
@@ -62,13 +61,14 @@
         computed: {
             ...mapGetters({
                 role: 'getUserRole',
-                isLogin: 'getIsLogin'
+                isLogin: 'getIsLogin',
+                drawer: 'getIsDrawerOpen'
             })
         },
 
+
         data() {
             return {
-                drawer: true,
                 items: [
                     {
                         icon: 'add_shopping_cart',
@@ -229,8 +229,8 @@
                             },
 
                             {
-                                icon: 'replay',
-                                text: 'Company Return List',
+                                icon: 'assignment',
+                                text: 'Company Return Ledger',
                                 link: 'companyReturnList',
                             }
 
@@ -310,7 +310,14 @@
                         ]
                     }
                 ],
+                isOpen: true
             }
+        },
+
+        watch:{
+          drawer(){
+              this.isOpen = this.drawer
+          }
         },
 
         methods: {

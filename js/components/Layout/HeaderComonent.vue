@@ -8,7 +8,7 @@
                 dark
                 v-if="isLogin"
         >
-            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-side-icon @click.stop="onNavigationBarToggle"></v-toolbar-side-icon>
             <v-icon class="mx-3">fab fa-youtube</v-icon>
             <v-toolbar-title class="mr-5 align-center">
                 <span class="title">NS Software - {{ selectedShop ? selectedShop.name : '' }}</span>
@@ -63,7 +63,8 @@
         computed: {
             ...mapGetters({
                 shops : 'getShops',
-                isLogin: 'getIsLogin'
+                isLogin: 'getIsLogin',
+                drawer: 'getIsDrawerOpen'
             }),
 
             selectedShop: {
@@ -96,6 +97,10 @@
         methods: {
             getShop(){
                 this.$store.dispatch('fetchShop', 1);
+            },
+
+            onNavigationBarToggle(){
+                this.$store.commit('setIsDrawerOpen', !this.drawer)
             }
         }
     }
