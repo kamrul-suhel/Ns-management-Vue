@@ -9,6 +9,7 @@ import saleAssistance from './modules/saleAssistance'
 import shop from './modules/shop'
 import company from './modules/company'
 import Drawer from './modules/drawer'
+import Account from './modules/account'
 
 Vue.use(Vuex);
 
@@ -69,7 +70,8 @@ const store = new Vuex.Store({
         shop,
         saleAssistance,
         company,
-        Drawer
+        Drawer,
+        Account
     }
 });
 

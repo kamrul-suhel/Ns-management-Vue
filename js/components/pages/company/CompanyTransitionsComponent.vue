@@ -82,7 +82,19 @@
                                         color="dark"
                                         :items="payment_type"
                                         label="Payment type"
+                                        @change="onPaymentTypeChange"
                                         v-model="editedItem.payment_type"
+                                ></v-select>
+                            </v-flex>
+
+                            <v-flex xs6 v-if="editedItem.payment_type === 'cheque'">
+                                <v-select
+                                    :items="accounts"
+                                    item-text="name"
+                                    item-value="id"
+                                    color="white"
+                                    v-model="editedItem.account_id"
+                                    label="Select a account"
                                 ></v-select>
                             </v-flex>
 
@@ -394,7 +406,8 @@
                 companies: 'getCompanies',
                 totalCompany: 'getTotalCompany',
                 transitions: 'getCompanyTransitions',
-                previousBalance: 'getCompanyPreviousBalance'
+                previousBalance: 'getCompanyPreviousBalance',
+                accounts: 'getAccounts'
             }),
 
             formTitle() {
@@ -431,6 +444,11 @@
             initialize() {
                 // get all product
                 this.$store.dispatch('loadCompanies')
+                this.$store.dispatch('fetchAllAccounts')
+            },
+
+            onPaymentTypeChange(){
+                console.log(this.editedItem.payment_type)
             },
 
             getNestedItem(item, name) {
@@ -507,6 +525,10 @@
                 form.append('credit', this.editedItem.credit);
                 form.append('balance', this.editedItem.balance);
                 form.append('manuel_date', this.editedItem.manuel_date);
+
+                if(this.editedItem.payment_type === 'cheque'){
+                    form.append('account_id', this.editedItem.account_id)
+                }
 
                 if (this.editedIndex !== -1) {
                     // update product
