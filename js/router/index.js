@@ -5,6 +5,8 @@ import ProductComponent from '../components/pages/products/ProductsComponent'
 import ProductAdd from '../components/pages/products/Add'
 import ProductEdit from '../components/pages/products/Edit'
 import DeleteProduct from '../components/pages/products/DeleteProduct'
+import AddProductMissing from '../components/pages/products/AddMissingProduct'
+import ProductMissingList from '../components/pages/products/MissingProductList'
 import TransactionComponent from '../components/pages/transaction/TransactionComponent'
 import CustomerComponent from '../components/pages/customer/CustomerComponent'
 import CustomerTransitionsComponent from '../components/pages/customer/CustomerTransitionsComponent'
@@ -34,6 +36,8 @@ import AddCompanyTransaction from '../components/pages/company/transition/Add'
 import CreateSaleAssistanceComponent from '../components/pages/sale-assistance/CreateSaleAssistanceComponent'
 import UpdateSaleAssistanceComponent from "../components/pages/sale-assistance/UpdateSaleAssistanceComponent";
 import CreateSaleAssistanceTransition from "../components/pages/sale-assistance/CreateTransaction";
+import CashComponent from "../components/pages/cash/CashComponent";
+import CustomerLedgerPrintComponent from "../components/pages/customer/CustomerLedgerPrintComponent";
 
 Vue.use(Router)
 
@@ -78,6 +82,18 @@ const routes = [
         path: '/products/add',
         name: 'productsAdd',
         component: ProductAdd
+    },
+
+    {
+        path: '/products/missing/add',
+        name: 'addProductMissing',
+        component: AddProductMissing
+    },
+
+    {
+        path: '/products/missing/list',
+        name: 'productMissingList',
+        component: ProductMissingList
     },
 
     {
@@ -153,6 +169,12 @@ const routes = [
         path: '/customers/ledger/create',
         name: 'customer_ledger_create',
         component: CreateCustomerLedger
+    },
+
+    {
+        path: '/customers/:id/print/:storeId',
+        name: 'customerLedgerPrint',
+        component: CustomerLedgerPrintComponent
     },
 
     {
@@ -248,6 +270,13 @@ const routes = [
         name: 'accountTransaction',
         component: AccountTransactionComponent
     },
+
+    {
+        path: '/cash',
+        name: 'cash',
+        component: CashComponent
+    },
+
 
     {
         path: '/user',

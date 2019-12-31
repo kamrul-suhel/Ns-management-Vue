@@ -88,6 +88,20 @@
                                 access: 'staff'
                             },
 
+                            {
+                                icon: 'system_update_alt',
+                                text: 'Add Missing Product',
+                                link: 'addProductMissing',
+                                access: 'admin'
+                            },
+
+                            {
+                                icon: 'list_alt',
+                                text: 'Ledger Missing Product',
+                                link: 'productMissingList',
+                                access: 'admin'
+                            },
+
 
                             {
                                 icon: 'subscriptions',
@@ -262,6 +276,20 @@
                                 icon: 'timeline',
                                 text: 'A Product',
                                 link: 'expenses',
+                            }
+                        ]
+                    },
+
+                    {
+                        icon: 'bubble_chart',
+                        text: 'Cash',
+                        access: 'admin',
+                        navs: [
+                            {
+                                icon: 'bubble_chart',
+                                text: 'Cash List',
+                                link: 'cash',
+                                access: 'admin'
                             }
                         ]
                     },

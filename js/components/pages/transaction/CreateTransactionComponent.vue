@@ -177,6 +177,16 @@
                                                 v-model="service_charge"
                                         ></v-text-field>
                                     </v-flex>
+
+                                    <v-flex xs6>
+                                        <v-text-field
+                                                dark
+                                                type="number"
+                                                color="dark"
+                                                label="Retail charge"
+                                                v-model="retailPrice"
+                                        ></v-text-field>
+                                    </v-flex>
                                 </v-layout>
 
                                 <v-layout row wrap>
@@ -191,7 +201,7 @@
                                             }}</strong></p>
                                         <p><strong>Discount: {{ discount }}</strong></p>
                                         <p><strong>Grand total: {{ parseFloat(total_amount_transactions) +
-                                            parseFloat(service_charge) - parseFloat(discount)
+                                            parseFloat(service_charge) - parseFloat(discount) + parseFloat(retailPrice)
                                             }}</strong></p>
 
                                     </v-flex>
@@ -245,29 +255,68 @@
             paid: '',
             discount: 0,
 
-            paymentStatus: [{text: 'paid', value: 1}, {text: 'Due', value: 2}, {
-                text: 'Half paid',
-                value: 3
-            }, {text: 'Pending', value: 4}],
+            paymentStatus: [
+                {
+                    text: 'paid',
+                    value: 1
+                },
+
+                {
+                    text: 'Due',
+                    value: 2
+                },
+
+                {
+                    text: 'Half paid',
+                    value: 3
+                },
+
+                {
+                    text: 'Pending',
+                    value: 4
+                }
+            ],
             selectedPaymentStatus: 1,
             active: [1, 2],
 
             isWarranty: false,
-            warranty: [{text: 'Yes', value: 1}, {text: 'No', value: 0}],
+            warranty: [
+                {
+                    text: 'Yes',
+                    value: 1
+                },
+
+                {
+                    text: 'No',
+                    value: 0
+                }
+            ],
 
             serial_number: '',
             length_warranty: '',
 
             service_charge: 0,
             special_discount: 0,
+            retailPrice: 0,
 
             // Bkash
             valid: true,
             paymentType: null,
             paymentTypes: [
-                {text: 'Bkash', value: 'bkash'},
-                {text: 'Cash', value: 'cash'},
-                {text: 'Bank', value: 'Transaction'}
+                {
+                    text: 'Bkash',
+                    value: 'bkash'
+                },
+
+                {
+                    text: 'Cash',
+                    value: 'cash'
+                },
+
+                {
+                    text: 'Bank',
+                    value: 'Transaction'
+                }
             ],
             phoneNumber: null,
             phoneNumberRules: [
@@ -312,6 +361,10 @@
             },
 
             service_charge(serviceCharge) {
+
+            },
+
+            retailPrice(){
 
             }
         },
@@ -415,6 +468,7 @@
                     form.append('payment_type', this.paymentType);
                     form.append('account_id', this.bankAccountId);
                     form.append('reference', this.reference);
+                    form.append('retail_price', this.retailPrice);
 
                     if (this.selectedPaymentStatus > 1) {
                         form.append('payment_due', total - this.paid);

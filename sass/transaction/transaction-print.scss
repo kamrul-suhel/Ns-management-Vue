@@ -16,6 +16,15 @@
   .transaction-print{
     color:#000;
 
+    .v-card{
+      box-shadow:none;
+    }
+
+    &.full-width{
+      width: 8.3in;
+      height: 11.2in;
+    }
+
     .print-btn{
       display:none;
     }

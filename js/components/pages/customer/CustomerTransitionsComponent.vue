@@ -26,7 +26,7 @@
                         <v-card-title>Total</v-card-title>
                         <v-card-text class="pt-0">
                             <h2 class="display-2 white--text text-xs-center">
-                                <strong>{{ credit }}</strong>
+                                <strong>{{ debit }}</strong>
                             </h2>
                         </v-card-text>
                     </v-card>
@@ -37,7 +37,7 @@
                         <v-card-title>Paid</v-card-title>
                         <v-card-text class="pt-0">
                             <h2 class="display-2 white--text text-xs-center">
-                                <strong>{{ debit }}</strong>
+                                <strong>{{ credit }}</strong>
                             </h2>
                         </v-card-text>
                     </v-card>
@@ -62,15 +62,34 @@
                         raised
                         width="100%">
                     <v-card-title class="pb-0 pt-0">
-                        <v-autocomplete
-                                color="dark"
-                                v-model="selectedCustomer"
-                                :items="customers"
-                                item-text="name"
-                                return-object
-                                label="Select A customer"
-                                persistent-hint
-                        ></v-autocomplete>
+                        <v-layout row wrap>
+                            <v-flex xs10>
+                                <v-autocomplete
+                                        color="dark"
+                                        v-model="selectedCustomer"
+                                        :items="customers"
+                                        item-text="name"
+                                        return-object
+                                        label="Select A customer"
+                                        persistent-hint
+                                ></v-autocomplete>
+                            </v-flex>
+
+                            <v-flex xs2 class="text-xs-right">
+                                <v-btn fab dark small
+                                       @click="$router.push({
+                                        name: 'customerLedgerPrint',
+                                        params:{
+                                            id: selectedCustomer.id,
+                                            storeId: storeId
+                                        }
+                                        })"
+                                       outline
+                                       color="white">
+                                    <v-icon dark color="white">local_printshop</v-icon>
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
                     </v-card-title>
 
                     <v-card-text>
@@ -88,7 +107,6 @@
                                 <td>TK. {{ props.item.credit }}</td>
                                 <td>TK. {{ props.item.balance }}</td>
                                 <td>{{ props.item.created_at | convertDate }}</td>
-                                <td></td>
                             </template>
 
                             <template slot="no-data">
@@ -153,11 +171,6 @@
                     text: 'Date',
                     value: 'date',
                     sortable: true
-                },
-
-                {
-                    text: 'Actions',
-                    value:'actions'
                 }
             ],
             total_customer: '',
@@ -186,7 +199,8 @@
                 customerDue: 'getCustomerTransactionDue',
                 credit: 'getCustomerCredit',
                 debit: 'getCustomerDebit',
-                balance: 'getCustomerBalance'
+                balance: 'getCustomerBalance',
+                storeId: 'getSelectedShopId'
             }),
 
         },
