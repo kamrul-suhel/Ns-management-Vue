@@ -10,6 +10,7 @@ import shop from './modules/shop'
 import company from './modules/company'
 import Drawer from './modules/drawer'
 import Account from './modules/account'
+import CreateTransaction from './modules/createTransaction'
 
 Vue.use(Vuex);
 
@@ -71,7 +72,8 @@ const store = new Vuex.Store({
         saleAssistance,
         company,
         Drawer,
-        Account
+        Account,
+        CreateTransaction
     }
 });
 

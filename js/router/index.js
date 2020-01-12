@@ -13,6 +13,7 @@ import CustomerTransitionsComponent from '../components/pages/customer/CustomerT
 import CreateCustomerLedger from '../components/pages/customer/CreateCustomerLedger'
 import ShopComponent from '../components/pages/shop/ShopComponent'
 import CreateTransaction from '../components/pages/transaction/CreateTransactionComponent'
+import CreateManualTransaction from '../components/pages/transaction/CreateManualTransaction'
 import CreateDueTransaction from '../components/pages/transaction/CreateDueTransactionComponent'
 import TransactionPrint from '../components/pages/transaction/TransactionPrintComponent'
 import SaleReturn from '../components/pages/transaction/SaleReturn'
@@ -38,6 +39,7 @@ import UpdateSaleAssistanceComponent from "../components/pages/sale-assistance/U
 import CreateSaleAssistanceTransition from "../components/pages/sale-assistance/CreateTransaction";
 import CashComponent from "../components/pages/cash/CashComponent";
 import CustomerLedgerPrintComponent from "../components/pages/customer/CustomerLedgerPrintComponent";
+import CustomerLedgerPrintAllComponent from "../components/pages/customer/CustomerLedgerPrintAllComponent";
 
 Vue.use(Router)
 
@@ -109,6 +111,12 @@ const routes = [
     },
 
     {
+        path: '/transaction/create/manual',
+        name: 'create_transaction_manual',
+        component: CreateManualTransaction
+    },
+
+    {
         path: '/transaction/due/create',
         name: 'create_due_transaction',
         component: CreateDueTransaction
@@ -164,6 +172,11 @@ const routes = [
         path: '/customers/ledger',
         name: 'customer_ledger',
         component: CustomerTransitionsComponent
+    },
+    {
+        path: '/customers/ledger/all/:storeId',
+        name: 'customer_ledger_all',
+        component: CustomerLedgerPrintAllComponent
     },
     {
         path: '/customers/ledger/create',

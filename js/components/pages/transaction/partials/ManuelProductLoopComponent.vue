@@ -70,7 +70,21 @@
             ></v-autocomplete>
         </v-flex>
 
-        <v-flex xs3>
+        <v-flex xs3 v-if="selectedProduct.is_barcode === 'serial'">
+            <v-autocomplete
+                    label="Barcode"
+                    dark
+                    color="dark"
+                    :disabled="selectedProduct.isDisabled"
+                    :items="selectedProduct.serials"
+                    item-text="barcode"
+                    item-value="barcode"
+                    v-model="selectedSerials"
+                    return-object
+            ></v-autocomplete>
+        </v-flex>
+
+        <v-flex xs3 v-else>
             <v-text-field
                     dark
                     color="dark"
@@ -154,6 +168,7 @@
         ],
         watch: {
             selectedProduct(product) {
+                console.log('selected product: ', product)
                 if (product) {
                     this.updateStore(product.id);
                 }

@@ -43,6 +43,16 @@
                                 @click="onDueTransaction()">
                             Crate Due Transaction
                         </v-btn>
+
+                        <v-btn
+                                small
+                                :disabled="!createTransaction"
+                                dark
+                                color="dark"
+                                @click="onManuelTransaction()">
+                            Crate Manuel Transaction
+                        </v-btn>
+
                         <p class="red--text" v-if="!createTransaction">To make a transaction please first make a
                             customer & product</p>
                         <v-spacer></v-spacer>
@@ -666,6 +676,10 @@
 
             onDueTransaction() {
                 this.$router.push({name: 'create_due_transaction'});
+            },
+
+            onManuelTransaction(){
+                this.$router.push({name: 'create_transaction_manual'})
             },
 
             customFilter(items, search, filter) {

@@ -76,7 +76,8 @@
                             </v-flex>
 
                             <v-flex xs2 class="text-xs-right">
-                                <v-btn fab dark small
+                                <v-btn dark small
+                                       v-if="transitions.length > 0"
                                        @click="$router.push({
                                         name: 'customerLedgerPrint',
                                         params:{
@@ -84,9 +85,8 @@
                                             storeId: storeId
                                         }
                                         })"
-                                       outline
-                                       color="white">
-                                    <v-icon dark color="white">local_printshop</v-icon>
+                                >
+                                    Print
                                 </v-btn>
                             </v-flex>
                         </v-layout>
@@ -115,6 +115,22 @@
                         </v-data-table>
 
                     </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn dark
+                               @click="$router.push({
+                                            name: 'customer_ledger_all',
+                                            params:{
+                                                id: selectedCustomer.id,
+                                                storeId: storeId
+                                            }
+
+                                        })"
+                        >
+                            Print all customer ledger
+                        </v-btn>
+                    </v-card-actions>
                 </v-card>
             </v-layout>
         </v-container>
